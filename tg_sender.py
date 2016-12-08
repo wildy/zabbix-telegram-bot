@@ -1,11 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import ConfigParser, telebot, requests, argparse
+import ConfigParser, telebot, requests, argparse, os
 from telebot import types
 
+# Change directory to script's current dir
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 # INI file with configuration variables
-conffile = "./tgbot.conf"
+conffile = "./local.conf"
 
 # Read in configuration
 c = ConfigParser.ConfigParser()
