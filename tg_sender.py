@@ -8,7 +8,7 @@ from telebot import types
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # INI file with configuration variables
-conffile = "./local.conf"
+conffile = "./tgbot.conf"
 
 # Read in configuration
 c = ConfigParser.ConfigParser()
