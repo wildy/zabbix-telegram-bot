@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 #
 # Telegram events receiver, acknowledges events.
 import ConfigParser, telebot, requests, re
@@ -52,13 +52,15 @@ def ack_callback(call):
 			bot.answer_callback_query(call.id, text=success_msg, show_alert=False)
 		except:
 			# For some reason we couldn't :(
-			print(unsuccessful_msg + ', call: ' + str(call))
 			bot.send_message(call.message.chat.id, unsuccessful_msg, parse_mode='Markdown')
 			bot.answer_callback_query(call.id, text=unsuccessful_msg, show_alert=True)
+			raise
+
 
 def zabbix_acknowledge(event_id, message):
 	# Try to acknowledge an event in Zabbix
 	zapi.do_request('event.acknowledge', {'eventids': event_id, 'message': message })
 
-# Start the bot
-bot.polling()
+if __name__ == "__main__":
+	# Start the bot
+	bot.polling()

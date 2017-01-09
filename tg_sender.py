@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 
 import ConfigParser, telebot, requests, argparse, os
 from telebot import types
