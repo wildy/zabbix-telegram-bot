@@ -22,7 +22,6 @@ zabbix_description = c.get('zabbix', 'zabbix_description')
 zabbix_api_user = c.get('zabbix', 'zabbix_api_user')
 zabbix_api_password = c.get('zabbix', 'zabbix_api_password')
 
-zapi = ZabbixAPI(url=zabbix_url, user=zabbix_api_user, password=zabbix_api_password)
 bot = telebot.TeleBot(api_token)
 
 # Get callback query and process it
@@ -59,6 +58,7 @@ def ack_callback(call):
 
 def zabbix_acknowledge(event_id, message):
 	# Try to acknowledge an event in Zabbix
+	zapi = ZabbixAPI(url=zabbix_url, user=zabbix_api_user, password=zabbix_api_password)
 	zapi.do_request('event.acknowledge', {'eventids': event_id, 'message': message })
 
 if __name__ == "__main__":
