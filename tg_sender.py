@@ -24,14 +24,13 @@ zabbix_description = c.get('zabbix', 'zabbix_description')
 bot = telebot.TeleBot(api_token)
 
 @bot.message_handler(content_types=["text"])
-
 def handle_trigger(event_id, trigger, severity, status, group, zabbix_description, level=None):
 	from telebot import types
 	group_id = c.get('groups', group)
 	message = """
-*%s*
+<b>%s</b>
 (%s)
-Trigger *%s*:
+Trigger <b>%s</b>:
 
 %s
 	""" % (zabbix_description, severity, status, trigger)
@@ -55,7 +54,7 @@ Trigger *%s*:
 		ack_button = types.InlineKeyboardButton(text="Acknowledge", callback_data="ACKNOWLEDGE %s" % event_id)
 		kb.add(ack_button)
 
-	bot.send_message(group_id, message, parse_mode='Markdown', disable_notification=disable_notification, reply_markup=kb)
+	bot.send_message(group_id, message, parse_mode='HTML', disable_notification=disable_notification, reply_markup=kb)
 
 parser = argparse.ArgumentParser(add_help=True)
 parser.add_argument('-i', dest='event_id', help='Event ID (for inline acknowledge)', required=True, type=int)
