@@ -3,7 +3,6 @@
 
 import ConfigParser
 import telebot
-import requests
 import argparse
 import os
 from telebot import types

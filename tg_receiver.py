@@ -4,7 +4,6 @@
 # Telegram events receiver, acknowledges events.
 import ConfigParser
 import telebot
-import requests
 import re
 from pyzabbix import ZabbixAPI
 from datetime import datetime
