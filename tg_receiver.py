@@ -61,11 +61,12 @@ def ack_callback(call):
         except:
             # For some reason we couldn't :(
             e = sys.exc_info()
+            msg = unsuccessful_msg + ': ' + str(e[1])
             bot.send_message(call.message.chat.id,
-                             unsuccessful_msg, parse_mode='Markdown')
+                             msg, parse_mode='Markdown')
             bot.answer_callback_query(
-                call.id, text=unsuccessful_msg, show_alert=True)
-            logging.warning('Zabbix API error: %s' % e)
+                call.id, text=msg, show_alert=True)
+            logging.warning('Zabbix API error: %s', str(e[1]))
 
 
 def zabbix_acknowledge(event_id, message):

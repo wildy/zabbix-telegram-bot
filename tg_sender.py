@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
-
 import ConfigParser
 import telebot
 import argparse
@@ -22,10 +21,8 @@ api_token = c.get('globals', 'api_token')
 zabbix_url = c.get('zabbix', 'zabbix_url')
 zabbix_description = c.get('zabbix', 'zabbix_description')
 
-
 # Init bot
 bot = telebot.TeleBot(api_token)
-
 
 @bot.message_handler(content_types=["text"])
 def handle_trigger(event_id, trigger, severity, status, group, zabbix_description, level=None):
