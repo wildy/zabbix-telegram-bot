@@ -7,7 +7,8 @@ import telebot
 import re
 from pyzabbix import ZabbixAPI
 from datetime import datetime
-
+import logging
+import sys
 
 # INI file with configuration variables
 conffile = "./tgbot.conf"
@@ -27,8 +28,6 @@ zabbix_api_password = c.get('zabbix', 'zabbix_api_password')
 bot = telebot.TeleBot(api_token)
 
 # Get callback query and process it
-
-
 @bot.callback_query_handler(func=lambda call: True)
 def ack_callback(call):
     ack = {}
@@ -61,11 +60,12 @@ def ack_callback(call):
                 call.id, text=success_msg, show_alert=False)
         except:
             # For some reason we couldn't :(
+            e = sys.exc_info()
             bot.send_message(call.message.chat.id,
                              unsuccessful_msg, parse_mode='Markdown')
             bot.answer_callback_query(
                 call.id, text=unsuccessful_msg, show_alert=True)
-            raise
+            logging.warning('Zabbix API error: %s' % e)
 
 
 def zabbix_acknowledge(event_id, message):
