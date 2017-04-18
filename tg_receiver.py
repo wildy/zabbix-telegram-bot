@@ -38,32 +38,30 @@ def ack_callback(call):
     # If the message is older than ignore_older_than_mins, complain to chat
     # loudly
     reply_age_mins = ((datetime.now() - ack['timestamp']).seconds // 60) % 60
-    too_old_msg = "*ERROR:* Received ACK to message older than %s mins, you can only ACK this manually!" % ignore_older_than_mins
-    success_msg = "@%s *successfully acknowledged* Zabbix trigger %s." % (
-        call.from_user.username, ack['eventid'])
-    unsuccessful_msg = "*ERROR:* Could not acknowledge Zabbix event %s, check bot!" % ack[
-        'eventid']
+    too_old_msg = "ERROR: Received ACK to message older than %s mins, you can only ACK this manually!" % ignore_older_than_mins
+    success_msg = "@%s successfully acknowledged Zabbix trigger %s." % (call.from_user.username, ack['eventid'])
+    unsuccessful_msg = "ERROR: Could not acknowledge Zabbix event %s, check bot!" % ack['eventid']
 
     if (reply_age_mins > ignore_older_than_mins):
         # User clicked the button on an ancient message
         print(too_old_msg + ', call: ' + str(call))
         bot.send_message(call.message.chat.id, too_old_msg,
-                         parse_mode='Markdown', reply_to_message_id=call.message.message_id)
+                        reply_to_message_id=call.message.message_id)
         bot.answer_callback_query(call.id, text=too_old_msg, show_alert=True)
     else:
         try:
             # Try to ACK it in Zabbix
             zabbix_acknowledge(ack['eventid'], message)
-            bot.send_message(call.message.chat.id, success_msg, parse_mode='Markdown',
-                             reply_to_message_id=call.message.message_id, disable_notification=True)
+            bot.send_message(call.message.chat.id, success_msg, 
+                            reply_to_message_id=call.message.message_id,
+                            disable_notification=True)
             bot.answer_callback_query(
                 call.id, text=success_msg, show_alert=False)
         except:
             # For some reason we couldn't :(
             e = sys.exc_info()
             msg = unsuccessful_msg + ': ' + str(e[1])
-            bot.send_message(call.message.chat.id,
-                             msg, parse_mode='Markdown')
+            bot.send_message(call.message.chat.id, msg)
             bot.answer_callback_query(
                 call.id, text=msg, show_alert=True)
             logging.warning('Zabbix API error: %s', str(e[1]))
